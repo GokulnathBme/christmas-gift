@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Christmas Challenge 🎄</title>
+
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+      }
+
+      .container {
+        text-align: center;
+        position: relative;
+      }
+
+      h1 {
+        margin-bottom: 40px;
+        font-size: 2rem;
+      }
+
+      button {
+        padding: 12px 30px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      #yesBtn {
+        background-color: #4caf50;
+        color: white;
+        margin-right: 20px;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 20px;
+      }
+
+      .no-zone {
+        position: relative;
+        width: 180px;
+        height: 120px;
+      }
+
+      #noBtn {
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        background-color: #f44336;
+        color: white;
+      }
+
+      #message {
+        margin-top: 30px;
+        font-size: 1.1rem;
+        color: #ffeb3b;
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>
+        Are you ready for a small challenge<br />before claiming your Christmas
+        gift? 🎁
+      </h1>
+
+      <div class="buttons">
+        <button id="yesBtn">Yes</button>
+
+        <!-- Movement zone -->
+        <div class="no-zone">
+          <button id="noBtn">No</button>
+        </div>
+      </div>
+
+      <div id="message">Nice try 😄</div>
+    </div>
+
+    <script>
+      const noBtn = document.getElementById("noBtn");
+      const message = document.getElementById("message");
+
+      let moveCount = 0;
+      const maxMoves = 5;
+
+      noBtn.addEventListener("mouseenter", () => {
+        if (moveCount >= maxMoves) return;
+
+        moveCount++;
+
+        const zone = document.querySelector(".no-zone");
+        const maxX = zone.clientWidth - noBtn.offsetWidth;
+        const maxY = zone.clientHeight - noBtn.offsetHeight;
+
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+
+        noBtn.style.left = `${randomX}px`;
+        noBtn.style.top = `${randomY}px`;
+      });
+
+      noBtn.addEventListener("click", () => {
+        message.style.display = "block";
+
+        noBtn.style.transition = "opacity 0.4s ease";
+        noBtn.style.opacity = "0";
+
+        setTimeout(() => {
+          noBtn.style.display = "none";
+        }, 400);
+      });
+    </script>
+  </body>
+</html>
