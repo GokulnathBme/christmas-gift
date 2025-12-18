@@ -155,28 +155,27 @@
 
         const maxX = window.innerWidth - noBtn.offsetWidth,
           maxY = window.innerHeight - noBtn.offsetHeight;
-        noBtn.style.left = `${Math.random() * maxX}px`;
-        noBtn.style.top = `${Math.random() * maxY}px`;
 
-        message.textContent = sarcasticMessages[clickCount];
-        message.style.display = "block";
+        if (clickCount < maxClicks - 1) {
+          // Move button only for first 4 clicks
+          noBtn.style.left = `${Math.random() * maxX}px`;
+          noBtn.style.top = `${Math.random() * maxY}px`;
+          message.textContent = sarcasticMessages[clickCount];
+          message.style.display = "block";
+        }
 
         clickCount++;
 
         if (clickCount === maxClicks) {
-          // Stop any further moves immediately
-          noBtn.removeEventListener("click", moveNoButton);
+          // Immediately hide No button and show success
+          noBtn.style.display = "none";
+          message.style.display = "none";
+          fakeSuccess.style.display = "flex";
 
           setTimeout(() => {
-            noBtn.style.display = "none";
-            message.style.display = "none";
-            fakeSuccess.style.display = "flex";
-
-            setTimeout(() => {
-              fakeSuccess.style.display = "none";
-              yesBtn.classList.remove("hidden");
-            }, 1200);
-          }, 700);
+            fakeSuccess.style.display = "none";
+            yesBtn.classList.remove("hidden");
+          }, 3500); // optional short delay for pop animation
         }
       }
 
@@ -188,193 +187,4 @@
     </script>
   </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🎄Christmas Challenge</title>
-    <style>
-      body {
-        margin: 0;
-        height: 100vh;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-        color: white;
-        overflow: hidden;
-      }
-      .container {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-      }
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 40px;
-      }
-      .button-row {
-        display: flex;
-        gap: 20px;
-      }
-      button {
-        width: 140px;
-        height: 50px;
-        font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: transform 0.4s ease, opacity 0.4s ease;
-      }
-      #yesBtn {
-        background-color: #4caf50;
-        color: white;
-      }
-      #noBtn {
-        background-color: #f44336;
-        color: white;
-        position: relative;
-      }
-      #message {
-        margin-top: 40px;
-        font-size: 1.1rem;
-        color: #ffeb3b;
-        display: none;
-      }
-      @keyframes shake {
-        0% {
-          transform: translate(0);
-        }
-        25% {
-          transform: translate(-4px, 4px);
-        }
-        50% {
-          transform: translate(4px, -4px);
-        }
-        75% {
-          transform: translate(-4px, -4px);
-        }
-        100% {
-          transform: translate(0);
-        }
-      }
-      .shake {
-        animation: shake 0.25s;
-      }
-      @keyframes pop {
-        0% {
-          transform: scale(0.6);
-          opacity: 0;
-        }
-        60% {
-          transform: scale(1.1);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-      #fakeSuccess {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.85);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        font-size: 2.2rem;
-        color: #4caf50;
-        z-index: 999;
-        animation: pop 0.6s ease forwards;
-      }
-      .hidden {
-        transform: scale(0);
-        opacity: 0;
-        pointer-events: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="fakeSuccess">🎉 Okay, you win! Time for your gift! 🎁</div>
-    <div class="container">
-      <h1>
-        Are you ready for a small challenge 🎮 <br />
-        from your secret santa🎅🏻<br />
-        before claiming your Christmas gift? 🎁
-      </h1>
-      <div class="button-row">
-        <button id="yesBtn">Yes</button>
-        <button id="noBtn">No</button>
-      </div>
-      <div id="message"></div>
-    </div>
-    <script>
-      const noBtn = document.getElementById("noBtn"),
-        yesBtn = document.getElementById("yesBtn"),
-        message = document.getElementById("message"),
-        fakeSuccess = document.getElementById("fakeSuccess");
 
-      let sarcasticMessages = [
-        "Bold choice. But still...",
-        "We both know that’s not happening.",
-        "That button was just a decorative.",
-        "You had just one job...",
-        "Nope. Try again.",
-      ];
-      sarcasticMessages.sort(() => Math.random() - 0.5);
-
-      let clickCount = 0,
-        maxClicks = sarcasticMessages.length,
-        roaming = false;
-
-      // Hide YES after 1 second on load
-      setTimeout(() => yesBtn.classList.add("hidden"), 1000);
-
-      function moveNoButton() {
-        if (clickCount >= maxClicks) return; // stop further moves after 5th click
-
-        document.body.classList.add("shake");
-        setTimeout(() => document.body.classList.remove("shake"), 250);
-
-        if (!roaming) {
-          roaming = true;
-          noBtn.style.position = "fixed";
-        }
-
-        const maxX = window.innerWidth - noBtn.offsetWidth,
-          maxY = window.innerHeight - noBtn.offsetHeight;
-        noBtn.style.left = `${Math.random() * maxX}px`;
-        noBtn.style.top = `${Math.random() * maxY}px`;
-
-        message.textContent = sarcasticMessages[clickCount];
-        message.style.display = "block";
-
-        clickCount++;
-
-        if (clickCount === maxClicks) {
-          // Stop any further moves immediately
-          noBtn.removeEventListener("click", moveNoButton);
-
-          setTimeout(() => {
-            noBtn.style.display = "none";
-            message.style.display = "none";
-            fakeSuccess.style.display = "flex";
-
-            setTimeout(() => {
-              fakeSuccess.style.display = "none";
-              yesBtn.classList.remove("hidden");
-            }, 1200);
-          }, 700);
-        }
-      }
-
-      noBtn.addEventListener("click", moveNoButton);
-
-      yesBtn.addEventListener("click", () => {
-        window.location.href = "puzzle.html";
-      });
-    </script>
-  </body>
-</html>
