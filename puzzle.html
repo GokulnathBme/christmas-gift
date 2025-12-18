@@ -1,118 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Christmas Puzzle 🎄</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎄Christmas Challenge</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: white;
-    }
+      .container {
+        text-align: center;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-    .container {
-      text-align: center;
-      max-width: 500px;
-      padding: 20px;
-    }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 40px;
+      }
 
-    h1 {
-      margin-bottom: 20px;
-    }
+      /* SANTA gradient wave animation */
+      #santaWord {
+        color: white;
+        display: inline-block;
+        background: none;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: white;
+      }
 
-    .riddle {
-      font-size: 1.2rem;
-      margin-bottom: 25px;
-    }
+      #santaWord.active {
+        background: linear-gradient(270deg, red, white, red, white);
+        background-size: 400% 100%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: santaWave 3s linear infinite;
+      }
 
-    input {
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 4px;
-      border: none;
-      width: 70%;
-      text-align: center;
-    }
+      @keyframes santaWave {
+        0% {
+          background-position: 0% 0;
+        }
+        50% {
+          background-position: 100% 0;
+        }
+        100% {
+          background-position: 0% 0;
+        }
+      }
 
-    button {
-      margin-top: 20px;
-      padding: 10px 30px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background-color: #4caf50;
-      color: white;
-    }
+      .riddle {
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+        max-width: 400px;
+      }
 
-    .feedback {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      display: none;
-    }
+      input {
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: none;
+        width: 70%;
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-    .error {
-      color: #ffb3b3;
-    }
+      button {
+        width: 140px;
+        height: 50px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        background-color: #4caf50;
+        color: white;
+        margin: 5px;
+      }
 
-    .success {
-      color: #b2ff59;
-    }
-  </style>
-</head>
+      #hintBtn {
+        background-color: #ff9800;
+        display: none;
+      }
 
-<body>
-  <div class="container">
-    <h1>🎄 Christmas Puzzle</h1>
+      .feedback {
+        margin-top: 10px;
+        font-size: 1.1rem;
+        display: none;
+      }
 
-    <div class="riddle">
-      I’m wrapped but not a gift,<br>
-      I’m white but not snow,<br>
-      I keep you warm wherever you go.<br><br>
-      What am I?
+      .error {
+        color: #ffeb3b;
+      }
+      .success {
+        color: #4caf50;
+      }
+
+      .fade-out {
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+      .fade-out-slow {
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+
+      #step2-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      #step2-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      #step2-container input {
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎄 Secret <span id="santaWord">SANTA</span> Puzzle</h1>
+
+      <!-- Step 1 -->
+      <div class="riddle" id="step1">
+        I bring joy but I’m not a toy,<br />
+        On Christmas Eve, I fly across the sky,<br />
+        Red suit, white beard — who am I?
+      </div>
+      <input
+        type="text"
+        id="answer1"
+        placeholder="Your answer..."
+        autocomplete="off"
+      />
+      <br />
+      <button id="submit1" onclick="checkStep1()">Submit</button>
+      <div id="feedback" class="feedback"></div>
+
+      <!-- Step 2 -->
+      <div class="riddle" id="step2" style="display: none">
+        Awesome! Now, who is your Secret Santa? 🎅 (case-sensitive)
+      </div>
+      <div id="step2-container">
+        <div id="step2-feedback" class="feedback"></div>
+        <input
+          type="text"
+          id="answer2"
+          placeholder="Enter name..."
+          autocomplete="off"
+        />
+        <div id="step2-buttons">
+          <button id="submit2" onclick="checkStep2()">Submit</button>
+          <button id="hintBtn" onclick="showHint()">Hint</button>
+        </div>
+      </div>
+      <div id="hintText" class="feedback" style="display: none">
+        Check the back of the card you received 🎁
+      </div>
     </div>
 
-    <input
-      type="text"
-      id="answer"
-      placeholder="Your answer..."
-      autocomplete="off"
-    />
+    <script>
+      // Animate SANTA gradient after 3 seconds
+      setTimeout(() => {
+        document.getElementById("santaWord").classList.add("active");
+      }, 3000);
 
-    <br />
-    <button onclick="checkAnswer()">Submit</button>
+      function checkStep1() {
+        const input = document
+          .getElementById("answer1")
+          .value.trim()
+          .toUpperCase();
+        const feedback = document.getElementById("feedback");
 
-    <div id="feedback" class="feedback"></div>
-  </div>
+        if (input === "SANTA") {
+          feedback.textContent = "Correct! 🎉 Step 2 unlocked!";
+          feedback.className = "feedback success";
+          feedback.style.display = "block";
 
-  <script>
-    function checkAnswer() {
-      const input = document.getElementById("answer").value.trim().toLowerCase();
-      const feedback = document.getElementById("feedback");
+          setTimeout(() => {
+            document.getElementById("step1").classList.add("fade-out");
+            document.getElementById("answer1").classList.add("fade-out");
+            document.getElementById("submit1").classList.add("fade-out");
+            feedback.classList.add("fade-out-slow");
 
-      const correctAnswers = ["scarf", "a scarf"];
+            setTimeout(() => {
+              document.getElementById("step1").style.display = "none";
+              document.getElementById("answer1").style.display = "none";
+              document.getElementById("submit1").style.display = "none";
+              feedback.style.display = "none";
 
-      if (correctAnswers.includes(input)) {
-        feedback.textContent = "Correct! 🎉 Get ready for your reward...";
-        feedback.className = "feedback success";
-        feedback.style.display = "block";
+              document.getElementById("step2").style.display = "block";
+              document.getElementById("step2-container").style.display = "flex";
 
-        setTimeout(() => {
-          window.location.href = "reveal.html";
-        }, 1500);
-      } else {
-        feedback.textContent = "Not quite — try again 😄";
-        feedback.className = "feedback error";
-        feedback.style.display = "block";
+              // Show hint button after 3 seconds
+              setTimeout(() => {
+                document.getElementById("hintBtn").style.display =
+                  "inline-block";
+              }, 3000);
+            }, 2000);
+          }, 1000);
+        } else {
+          feedback.textContent = "Not quite — think festive! 🎄";
+          feedback.className = "feedback error";
+          feedback.style.display = "block";
+        }
       }
-    }
-  </script>
-</body>
+
+      function checkStep2() {
+        const input = document.getElementById("answer2").value.trim();
+        const feedback = document.getElementById("step2-feedback");
+        const secretSanta = "GoKuL"; // exact case
+
+        if (input === secretSanta) {
+          feedback.textContent = "🎉 Correct! You've found your Secret Santa!";
+          feedback.className = "feedback success";
+          feedback.style.display = "block";
+
+          document.getElementById("answer2").classList.add("fade-out");
+          document.getElementById("submit2").classList.add("fade-out");
+          document.getElementById("hintBtn").classList.add("fade-out");
+          feedback.classList.add("fade-out-slow");
+
+          setTimeout(() => {
+            window.location.href = "reveal.html";
+          }, 1000);
+        } else {
+          feedback.textContent = "Hmm, that’s not right — try again!";
+          feedback.className = "feedback error";
+          feedback.style.display = "block";
+        }
+      }
+
+      function showHint() {
+        document.getElementById("hintText").style.display = "block";
+      }
+    </script>
+  </body>
 </html>
